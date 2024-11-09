@@ -1,20 +1,33 @@
-name: Code Check
-
-on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
-
-jobs:
-
-    code-check:
-        name: Check formatting, linting, vetting
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout the code
-              uses: actions/checkout@v4
-            - name: Run the formatter, linter, and vetter
-              uses: dell/common-github-actions/go-code-formatter-linter-vetter@main
-              with:
-                directories: ./...
+---
+  name: Lint
+  
+  on: # yamllint disable-line rule:truthy
+    push: null
+    pull_request: null
+  
+  permissions: {}
+  
+  jobs:
+    build:
+      name: Lint
+      runs-on: ubuntu-latest
+  
+      permissions:
+        contents: read
+        packages: read
+        # To report GitHub Actions status checks
+        statuses: write
+  
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+          with:
+            # super-linter needs the full git history to get the
+            # list of files that changed across commits
+            fetch-depth: 0
+  
+        - name: Super-linter
+          uses: super-linter/super-linter@v7.1.0 # x-release-please-version
+          env:
+            # To report GitHub Actions status checks
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
