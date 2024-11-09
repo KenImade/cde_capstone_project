@@ -2,4 +2,4 @@
 
 ## Super-Linter Status
 
-[![Super-Linter](https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/<WORKFLOW_FILE_NAME>/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![Super-Linter](https://github.com/KenImade/cde_capstone_project/actions/workflows/action.yml/badge.svg)](https://github.com/marketplace/actions/super-linter)
