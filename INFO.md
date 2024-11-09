@@ -49,7 +49,6 @@ A travel Agency reached out to CDE, their business model involves recommending t
 - Extracting the data from the API
 - Writing the extracted data to the Data Lake
 - Extracting the final required attributes to the Database/Data Warehouse.
-  
 - CI/CD should be integrated to the Github Repository
 - CI that carry out checks on code linting to ensure code written follow best practices.
 - CD to carry out the Build and Push of the code that Extract and Write to object storage to a Cloud based Container Registry.
