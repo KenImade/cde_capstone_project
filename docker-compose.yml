@@ -1,0 +1,71 @@
+version: '3.8'
+
+networks:
+  airflow-network:
+    driver: bridge
+
+volumes:
+  logs:
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: airflow_postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 10
+    networks:
+      - airflow-network
+
+  webserver:
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
+    image: airflow-custom:latest
+    container_name: airflow_webserver
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN_HOST: postgres
+      AIRFLOW_ADMIN_USERNAME: kenneth
+      AIRFLOW_ADMIN_PASSWORD: admin
+      AIRFLOW_ADMIN_EMAIL: kentheanalyticsengineer@gmail.com
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - logs:/opt/airflow/logs
+    networks:
+      - airflow-network
+    depends_on:
+      - postgres
+    command: ["webserver"]
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: airflow/Dockerfile
+    image: airflow-custom:latest
+    container_name: airflow_scheduler
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN_HOST: postgres
+      AIRFLOW_ADMIN_USERNAME: kenneth
+      AIRFLOW_ADMIN_PASSWORD: admin
+      AIRFLOW_ADMIN_EMAIL: kentheanalyticsengineer@gmail.com
+    depends_on:
+      - postgres
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - logs:/opt/airflow/logs
+    networks:
+      - airflow-network
+    command: ["scheduler"]
