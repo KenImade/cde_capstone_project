@@ -24,9 +24,9 @@ jobs:
       # Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/airflow-custom:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/airflow-custom:latest -f ./airflow/Dockerfile ./airflow
 
       # Push the Docker image to Docker Hub
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/airflow-custome:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/airflow-custom:latest
