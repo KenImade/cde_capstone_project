@@ -1,5 +1,11 @@
 FROM apache/airflow:slim-2.10.3-python3.9
 
+LABEL "Name"="Kenneth IMade"
+LABEL email="kenimade91@gmail.com"
+LABEL version="1.0"
+LABEL description="Custom Airflow Image to build data pipelines \
+for the CDE Capstone Project."
+
 # Set the working directory for Airflow
 WORKDIR /opt/airflow
 
@@ -29,3 +35,5 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 # Default command
 CMD ["webserver"]
+
+EXPOSE 8080
